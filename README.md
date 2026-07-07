@@ -95,61 +95,84 @@ flowchart TB
 
     %% Layer 1: Client Channels
     subgraph L1 ["Layer 1: Client Channels & Touchpoints"]
-        C1("👔 MSME Borrower Portal<br/>(Onboarding & Health Card)") ::: client
-        C2("🧑‍💼 Underwriter Studio<br/>(Relationship Manager Workbench)") ::: client
-        C3("👨‍⚖️ CRO Policy Studio<br/>(Macro Analytics & Thresholds)") ::: client
-        C4("🏦 Bank Core Systems<br/>(Disbursement Pipeline)") ::: core
+        C1["👔 MSME Borrower Portal (Onboarding & Health Card)"]
+        C2["🧑‍💼 Underwriter Studio (Relationship Manager Workbench)"]
+        C3["👨‍⚖️ CRO Policy Studio (Macro Analytics & Thresholds)"]
+        C4["🏦 Bank Core Systems (Disbursement Pipeline)"]
     end
 
     %% Layer 2: Edge Security
     subgraph L2 ["Layer 2: Edge Security & Ingestion Gateway"]
-        E1["AWS CloudFront & WAF<br/>(TLS 1.3 / DDoS Protection)"] ::: edge
-        E2["API Gateway & Prism Connect<br/>(mTLS & Cryptographic Verification)"] ::: edge
+        E1["AWS CloudFront & WAF (TLS 1.3 / DDoS Protection)"]
+        E2["API Gateway & Prism Connect (mTLS & Cryptographic Verification)"]
         C1 & C2 & C3 <==>|HTTPS / TLS 1.3| E1
         E1 <==> E2
     end
 
     %% Layer 3: External Institutional Ecosystem
     subgraph L3 ["Layer 3: External Institutional Ecosystem"]
-        X1[("FIU-IND Account Aggregator<br/>(12-Mo Bank Inflows)")] ::: ext
-        X2[("GST Network / GSTR-3B<br/>(Tax Return Verification)")] ::: ext
-        X3[("EPFO Portal<br/>(Workforce & Payroll Stability)")] ::: ext
-        X4[("UPI / NPCI Network<br/>(Micro-Tx Velocity Logs)")] ::: ext
+        X1["FIU-IND Account Aggregator (12-Mo Bank Inflows)"]
+        X2["GST Network / GSTR-3B (Tax Return Verification)"]
+        X3["EPFO Portal (Workforce & Payroll Stability)"]
+        X4["UPI / NPCI Network (Micro-Tx Velocity Logs)"]
         E2 <==>|Cryptographic Fetch| X1 & X2 & X3 & X4
     end
 
     %% Layer 4: Normalization
     subgraph L4 ["Layer 4: Abstraction & Schema Normalization Layer"]
-        P1["BaseParser Abstraction Interface<br/>(Decouples Raw Schemas from Math)"] ::: parse
-        P1 --> P2["AAParser / GSTParser / EPFOParser / UPIParser"] ::: parse
-        P2 -->|Standardized Signals| P3["Normalized Memory Buffer<br/>(Clean Float/Int Numeric Vectors)"] ::: parse
+        P1["BaseParser Abstraction Interface (Decouples Raw Schemas from Math)"]
+        P2["AAParser / GSTParser / EPFOParser / UPIParser"]
+        P3["Normalized Memory Buffer (Clean Float/Int Numeric Vectors)"]
+        P1 --> P2
+        P2 -->|Standardized Signals| P3
     end
 
     %% Layer 5: Scoring Engine
     subgraph L5 ["Layer 5: Deterministic Credit Decision Engine (Frozen)"]
-        P3 --> S1["4-Factor Mathematical Scoring Formula"] ::: engine
-        S1 -->|30%| I1["Cash Flow Index"] ::: engine
-        S1 -->|25%| I2["Growth Index"] ::: engine
-        S1 -->|25%| I3["Statutory Trust Index"] ::: engine
-        S1 -->|20%| I4["Repayment Risk Index"] ::: engine
-        I1 & I2 & I3 & I4 --> D1["Overall Prism Score (0-100)<br/>Risk Tier: GREEN / AMBER / RED"] ::: engine
-        D1 --> D2["Recommended Loan Ceiling Multiplier<br/>(4x Monthly Inflow × Confidence Buffer)"] ::: engine
+        S1["4-Factor Mathematical Scoring Formula"]
+        I1["Cash Flow Index (30%)"]
+        I2["Growth Index (25%)"]
+        I3["Statutory Trust Index (25%)"]
+        I4["Repayment Risk Index (20%)"]
+        D1["Overall Prism Score 0-100 (Risk Tier: GREEN / AMBER / RED)"]
+        D2["Recommended Loan Ceiling Multiplier (4x Monthly Inflow × Confidence Buffer)"]
+        P3 --> S1
+        S1 -->|30%| I1
+        S1 -->|25%| I2
+        S1 -->|25%| I3
+        S1 -->|20%| I4
+        I1 & I2 & I3 & I4 --> D1
+        D1 --> D2
     end
 
     %% Layer 6: AI Governance
     subgraph L6 ["Layer 6: AI Governance & Explainer Layer (Read-Only)"]
-        D2 --> A1["Google Gemini / Amazon Bedrock LLM"] ::: llm
-        A1 -->|Read Deterministic Math| A2["Natural Language Underwriting Memo<br/>(Zero Write Access / Zero Decision Authority)"] ::: llm
+        A1["Google Gemini / Amazon Bedrock LLM"]
+        A2["Natural Language Underwriting Memo (Zero Write Access / Zero Decision Authority)"]
+        D2 --> A1
+        A1 -->|Read Deterministic Math| A2
         A2 -->|HITL Memo| C2 & C3
     end
 
     %% Layer 7: Storage & Compliance
     subgraph L7 ["Layer 7: Persistence & Compliance Layer"]
-        D2 & C2 -->|Underwriter Sanction| T1[("WORM Audit Ledger<br/>(Immutable RBI Compliance Trail)")] ::: storage
-        D2 --> T2[("Aurora PostgreSQL Serverless<br/>(Profiles & Score Histories)")] ::: storage
-        E2 --> T3[("S3 Encrypted Vault<br/>(Evidence Documents / AES-256)")] ::: storage
+        T1["WORM Audit Ledger (Immutable RBI Compliance Trail)"]
+        T2["Aurora PostgreSQL Serverless (Profiles & Score Histories)"]
+        T3["S3 Encrypted Vault (Evidence Documents / AES-256)"]
+        D2 & C2 -->|Underwriter Sanction| T1
+        D2 --> T2
+        E2 --> T3
         T1 ===>|Sanctioned Limits| C4
     end
+
+    class C1,C2,C3 client;
+    class C4 core;
+    class E1,E2 edge;
+    class X1,X2,X3,X4 ext;
+    class P1,P2,P3 parse;
+    class S1,I1,I2,I3,I4,D1,D2 engine;
+    class A1,A2 llm;
+    class T1,T2,T3 storage;
 ```
 
 ---
@@ -573,23 +596,23 @@ Because the `BaseParser` normalizes both data streams into identical float/integ
 ```mermaid
 graph LR
     subgraph Sources ["Data Ingestion Sources"]
-        S1["Synthetic Hackathon Payloads<br/>(/data/sandboxPayloads.js)"]
-        S2["Live IDBI Bank Sandbox API<br/>(Account Aggregator Gateway)"]
-        S3["OCEN 4.0 / ULI Network<br/>(Unified Lending Interface)"]
-    </subgraph>
+        S1["Synthetic Hackathon Payloads (/data/sandboxPayloads.js)"]
+        S2["Live IDBI Bank Sandbox API (Account Aggregator Gateway)"]
+        S3["OCEN 4.0 / ULI Network (Unified Lending Interface)"]
+    end
 
     subgraph Normalization ["Layer 4: Abstraction Layer"]
-        BP["BaseParser Interface<br/>(Schema Agnostic Contract)"]
+        BP["BaseParser Interface (Schema Agnostic Contract)"]
         MAP["Field Mapping Engine"]
-    </subgraph>
+    end
 
     subgraph Vectors ["Standardized Signals"]
-        SIG["Clean Numeric Vector:<br/>• monthly_revenue (float)<br/>• bounce_rate (float)<br/>• filing_gaps (int)<br/>• business_age (float)"]
-    </subgraph>
+        SIG["Clean Numeric Vector: monthly_revenue float, bounce_rate float, filing_gaps int, business_age float"]
+    end
 
     subgraph Engine ["Layer 5: Frozen Decision Engine"]
-        MATH["Deterministic Scoring Math<br/>(orchestrator.py)<br/>ZERO CODE CHANGES REQUIRED"]
-    </subgraph>
+        MATH["Deterministic Scoring Math (orchestrator.py - ZERO CODE CHANGES REQUIRED)"]
+    end
 
     S1 & S2 & S3 ==>|Raw JSON / XML| BP
     BP ==> MAP
@@ -612,49 +635,49 @@ graph LR
 ```mermaid
 graph TD
     subgraph Client_Layer ["Client & Portal Touchpoints"]
-        Banker[IDBI Banker Portal / Web Studio]
-        MSME[MSME Applicant App / Mobile]
+        Banker["IDBI Banker Portal / Web Studio"]
+        MSME["MSME Applicant App / Mobile"]
     end
 
     subgraph AWS_Edge ["AWS Edge & Security Layer"]
-        CF[AWS CloudFront CDN / TLS 1.3]
-        WAF[AWS WAF - SQLi/XSS/DDoS Protection]
-        R53[Amazon Route 53 DNS]
+        CF["AWS CloudFront CDN / TLS 1.3"]
+        WAF["AWS WAF - SQLi/XSS/DDoS Protection"]
+        R53["Amazon Route 53 DNS"]
     end
 
     subgraph VPC_Public ["VPC - Public Subnet"]
-        ALB[Application Load Balancer]
-        IGW[Internet Gateway]
-    </subgraph>
+        ALB["Application Load Balancer"]
+        IGW["Internet Gateway"]
+    end
 
     subgraph VPC_Private_App ["VPC - Private Subnet (Application Layer)"]
-        ECS[Amazon ECS Fargate - FastAPI Containers]
-        Parser[BaseParser Abstraction Engine]
-        Engine[Decision Engine - orchestrator.py]
+        ECS["Amazon ECS Fargate - FastAPI Containers"]
+        Parser["BaseParser Abstraction Engine"]
+        Engine["Decision Engine - orchestrator.py"]
     end
 
     subgraph VPC_Private_Data ["VPC - Isolated Data Subnet (Zero Internet Access)"]
-        Aurora[Amazon Aurora PostgreSQL Serverless v2]
-        S3[Amazon S3 Encrypted Document Vault]
-        KMS[AWS KMS Key Management Service]
-        SM[AWS Secrets Manager]
+        Aurora["Amazon Aurora PostgreSQL Serverless v2"]
+        S3["Amazon S3 Encrypted Document Vault"]
+        KMS["AWS KMS Key Management Service"]
+        SM["AWS Secrets Manager"]
     end
 
     subgraph AWS_AI ["AWS AI & ML Services"]
-        Bedrock[Amazon Bedrock - Claude 3 / Llama 3]
-        Textract[AWS Textract - OCR Document AI]
+        Bedrock["Amazon Bedrock - Claude 3 / Llama 3"]
+        Textract["AWS Textract - OCR Document AI"]
     end
 
     subgraph Management ["Monitoring & Governance"]
-        CW[Amazon CloudWatch & CloudTrail]
-        IAM[AWS IAM - Least Privilege Roles]
+        CW["Amazon CloudWatch & CloudTrail"]
+        IAM["AWS IAM - Least Privilege Roles"]
     end
 
     subgraph External_Gateways ["IDBI Bank & Institutional Gateways"]
-        IDBI_SBX[IDBI Bank Core / Sandbox Gateway]
-        AA_FIU[Account Aggregator FIU-IND Network]
-        GSTN[GST Network Portal API]
-        NPCI[NPCI / UPI Payment Network]
+        IDBI_SBX["IDBI Bank Core / Sandbox Gateway"]
+        AA_FIU["Account Aggregator FIU-IND Network"]
+        GSTN["GST Network Portal API"]
+        NPCI["NPCI / UPI Payment Network"]
     end
 
     %% Routing Flow
