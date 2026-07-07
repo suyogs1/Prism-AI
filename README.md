@@ -16,7 +16,7 @@
 [![IDBI Innovate 2026](https://img.shields.io/badge/IDBI%20Innovate-2026-005696?style=flat)](https://www.idbibank.in/)
 [![Status](https://img.shields.io/badge/Status-Sandbox%20Ready%20MVP-10B981?style=flat)](#sandbox-readiness)
 
-[Explore Documentation](./docs) · [View Demo Flow](#demo-flow) · [API Reference](#api-documentation) ·
+[Explore Documentation](./docs) · [View Demo Flow](#demo-flow) · [API Reference](#api-documentation) 
 
 </div>
 
