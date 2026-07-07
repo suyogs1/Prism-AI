@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-
+const getTodayTimeStr = (timeStr) => `${new Date().toISOString().split('T')[0]} ${timeStr}`;
 const INITIAL_RECORDS = [
   {
     id: 'AUD-2024-001',
@@ -10,7 +10,7 @@ const INITIAL_RECORDS = [
     reason: 'Strong cash flow safety score and verified Udyam registration. All compliance checks passed.',
     previousStatus: 'PENDING_REVIEW',
     newStatus: 'APPROVED',
-    timestamp: '2024-01-14 10:15 AM',
+    timestamp: getTodayTimeStr('10:15 AM'),
     score: 84
   },
   {
@@ -22,7 +22,7 @@ const INITIAL_RECORDS = [
     reason: 'High cheque bounce rate exceeding 5% threshold and negative operating surplus.',
     previousStatus: 'PENDING_REVIEW',
     newStatus: 'DECLINED',
-    timestamp: '2024-01-14 11:30 AM',
+    timestamp: getTodayTimeStr('11:30 AM'),
     score: 42
   },
   {
@@ -34,11 +34,10 @@ const INITIAL_RECORDS = [
     reason: 'Missing EPFO filing history and UPI transaction logs. Requested supplementary data to raise confidence above 70%.',
     previousStatus: 'PENDING_REVIEW',
     newStatus: 'EVIDENCE_REQUESTED',
-    timestamp: '2024-01-15 09:45 AM',
+    timestamp: getTodayTimeStr('09:45 AM'),
     score: 68
   }
 ]
-
 const useAuditStore = create((set) => ({
   records: INITIAL_RECORDS,
   addRecord: (record) => set((state) => ({
@@ -54,5 +53,4 @@ const useAuditStore = create((set) => ({
   })),
   clearRecords: () => set({ records: INITIAL_RECORDS })
 }))
-
 export default useAuditStore
