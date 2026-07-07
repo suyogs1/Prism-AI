@@ -157,7 +157,7 @@ export default function JudgePage() {
               fontSize: 10, fontWeight: 700, padding: '2px 8px',
               background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)',
               borderRadius: 9999, color: 'var(--color-prism-400)', textTransform: 'uppercase', letterSpacing: '0.06em',
-            }}>IDBI Innovate 2024</span>
+            }}>IDBI Innovate {new Date().getFullYear()}</span>
           </div>
           <p style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>
             Prism AI Demo — Three MSME profiles across all risk tiers. Click any card to see the full Prism Report.
