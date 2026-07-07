@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import useAuthStore from '../store/authStore'
 import useApplicationStore from '../store/applicationStore'
-
 function PrismMark({ size = 48 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none">
@@ -19,63 +18,13 @@ function PrismMark({ size = 48 }) {
     </svg>
   )
 }
-
 const FADE = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }
 const STAGGER = { show: { transition: { staggerChildren: 0.12 } } }
-
 export default function LandingPage() {
   const navigate = useNavigate()
   const { loginAsbanker } = useAuthStore()
   const { selectApplication } = useApplicationStore()
-
-  const demoApplicants = [
-    {
-      id: 'PRZ-2024-001',
-      businessName: 'Sharma Textiles Pvt Ltd',
-      industry: 'Textile Manufacturing',
-      yearsInBusiness: 4.5,
-      annualTurnover: '₹26.4 Lakhs',
-      description: 'A leading regional manufacturer of cotton apparel with highly stable cash flows and zero GST filing delays.',
-      riskTier: 'GREEN',
-      color: '#10b981',
-      glow: 'rgba(16,185,129,0.25)',
-      badge: 'Healthy MSME'
-    },
-    {
-      id: 'PRZ-2024-002',
-      businessName: 'Priya Foods & Catering',
-      industry: 'Food & Beverages',
-      yearsInBusiness: 2.1,
-      annualTurnover: '₹11.4 Lakhs',
-      description: 'A fast-growing catering service facing minor seasonal cash flow dips and GSTR-3B filing delays.',
-      riskTier: 'AMBER',
-      color: '#f59e0b',
-      glow: 'rgba(245,158,11,0.25)',
-      badge: 'Borderline MSME'
-    },
-    {
-      id: 'PRZ-2024-003',
-      businessName: 'MetalWorks Fabrication',
-      industry: 'Metal Fabrication',
-      yearsInBusiness: 1.8,
-      annualTurnover: '₹45.6 Lakhs',
-      description: 'An early-stage heavy welding enterprise with significant GST filing gaps and high cheque bounce rates.',
-      riskTier: 'RED',
-      color: '#ef4444',
-      glow: 'rgba(239,68,68,0.25)',
-      badge: 'High Risk MSME'
-    }
-  ]
-
-  const handleLaunchDemo = (appId) => {
-    // 1. Log in as banker automatically
-    loginAsbanker()
-    // 2. Select applicant in store
-    selectApplication(appId)
-    // 3. Open Banker Dashboard with highlighted applicant
-    navigate('/banker/dashboard', { state: { highlightId: appId } })
-  }
-
+  // Clean landing page state for portal selection
   return (
     <div className="min-h-screen relative overflow-hidden flex flex-col justify-between py-6" style={{ background: 'var(--color-base)' }}>
       {/* Background radial glow */}
@@ -90,7 +39,6 @@ export default function LandingPage() {
         background: 'radial-gradient(circle, rgba(168,85,247,0.1) 0%, transparent 70%)',
         animation: 'orb-drift 20s ease-in-out infinite reverse',
       }}/>
-
       {/* Top Header */}
       <nav className="flex items-center justify-between px-10 mb-8 relative z-10">
         <div className="flex items-center gap-3">
@@ -108,7 +56,6 @@ export default function LandingPage() {
           💡 DEMO MODE (No Auth Required)
         </div>
       </nav>
-
       {/* Hero Section */}
       <motion.div
         variants={STAGGER} initial="hidden" animate="show"
@@ -120,7 +67,6 @@ export default function LandingPage() {
             ✦ Interactive Underwriting Showcase
           </div>
         </motion.div>
-
         <motion.h1 variants={FADE}
           className="font-black mb-4 tracking-tight leading-none"
           style={{ fontSize: 'clamp(2rem, 5.5vw, 3.8rem)' }}
@@ -129,7 +75,6 @@ export default function LandingPage() {
           <br />
           with Unrivaled Explainability
         </motion.h1>
-
         {/* Problem solved explainer */}
         <motion.p variants={FADE}
           className="max-w-2xl mb-12 text-sm leading-relaxed"
@@ -140,112 +85,166 @@ export default function LandingPage() {
           <span style={{ color: 'var(--color-prism-400)' }}> 100% deterministic scoring engine</span>.
           An advanced LLM then translates these metrics into natural-language reports for credit managers.
         </motion.p>
-
-        {/* Showcase Grid */}
-        <motion.div variants={FADE} className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl px-4">
-          {demoApplicants.map((app, index) => (
-            <motion.div
-              key={app.id}
-              whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              style={{
-                background: 'var(--color-surface)',
-                border: `1px solid var(--color-border-default)`,
-                borderRadius: 20,
-                padding: '24px',
-                textAlign: 'left',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'between',
-                position: 'relative',
-                overflow: 'hidden',
-                boxShadow: 'var(--shadow-card)',
-                transition: 'border-color 0.3s ease',
-              }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = app.color}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--color-border-default)'}
-            >
-              {/* Corner Glow */}
-              <div style={{
-                position: 'absolute', top: -40, right: -40, width: 100, height: 100,
-                background: `radial-gradient(circle, ${app.glow}, transparent)`,
-                borderRadius: '50%', pointerEvents: 'none'
-              }}/>
-
-              <div>
-                {/* Risk Badge */}
-                <div className="flex justify-between items-center mb-4">
-                  <span style={{
-                    fontSize: '10px', fontWeight: 800, padding: '2px 8px',
-                    borderRadius: 9999, background: `${app.color}15`,
-                    color: app.color, border: `1px solid ${app.color}25`,
-                    textTransform: 'uppercase', letterSpacing: '0.04em'
-                  }}>
-                    {app.badge}
-                  </span>
-                  <span style={{ fontSize: '10px', color: 'var(--color-text-muted)', fontFamily: 'var(--font-mono)' }}>
-                    {app.id}
-                  </span>
+        {/* Two Portal Options Grid */}
+        <motion.div variants={FADE} className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl px-4 mt-4">
+          {/* Banker Dashboard Option */}
+          <motion.div
+            whileHover={{ y: -6, transition: { duration: 0.2 } }}
+            style={{
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-border-default)',
+              borderRadius: 24,
+              padding: '32px',
+              textAlign: 'left',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              position: 'relative',
+              overflow: 'hidden',
+              boxShadow: 'var(--shadow-card)',
+              transition: 'border-color 0.3s ease',
+            }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = '#6366f1'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--color-border-default)'}
+          >
+            {/* Ambient Corner Glow */}
+            <div style={{
+              position: 'absolute', top: -50, right: -50, width: 160, height: 160,
+              background: 'radial-gradient(circle, rgba(99,102,241,0.22), transparent 70%)',
+              borderRadius: '50%', pointerEvents: 'none'
+            }}/>
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <span style={{
+                  fontSize: '11px', fontWeight: 800, padding: '4px 12px',
+                  borderRadius: 9999, background: 'rgba(99,102,241,0.15)',
+                  color: '#6366f1', border: '1px solid rgba(99,102,241,0.3)',
+                  textTransform: 'uppercase', letterSpacing: '0.06em'
+                }}>
+                  💼 For Credit Managers & RMs
+                </span>
+                <span style={{ fontSize: '24px' }}>🏦</span>
+              </div>
+              <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: 6 }}>
+                Enter Banker Dashboard
+              </h3>
+              <div style={{ fontSize: 13, color: 'var(--color-prism-400)', fontWeight: 600, marginBottom: 16 }}>
+                AI-Assisted Underwriting Studio
+              </div>
+              <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: 24 }}>
+                Access the enterprise underwriting studio. Inspect deterministic 4-index score evaluations, review RBI-compliant audit ledgers, simulate credit policy thresholds, and make data-driven loan decisions.
+              </p>
+              {/* Feature Checklist */}
+              <div className="flex flex-col gap-2.5 mb-8" style={{ borderTop: '1px solid var(--color-border-subtle)', paddingTop: 18 }}>
+                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                  <span style={{ color: '#10b981' }}>✓</span> 360° Risk Radar & Financial Health Cards
                 </div>
-
-                {/* Company & Sector */}
-                <h3 style={{ fontSize: 16, fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: 2 }}>
-                  {app.businessName}
-                </h3>
-                <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginBottom: 12 }}>
-                  {app.industry}
+                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                  <span style={{ color: '#10b981' }}>✓</span> Cryptographic Data Lineage & Provenance
                 </div>
-
-                {/* Description */}
-                <p style={{ fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.6, minHeight: 60, marginBottom: 16 }}>
-                  {app.description}
-                </p>
-
-                {/* Metadata details */}
-                <div className="grid grid-cols-2 gap-2 mb-6" style={{ borderTop: '1px solid var(--color-border-subtle)', paddingTop: 12 }}>
-                  <div>
-                    <div style={{ fontSize: '9px', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Turnover</div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)' }}>{app.annualTurnover}</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '9px', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Business Age</div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)', fontFamily: 'var(--font-mono)' }}>{app.yearsInBusiness} Yrs</div>
-                  </div>
+                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                  <span style={{ color: '#10b981' }}>✓</span> Real-Time Credit Sizing & Policy Simulation
                 </div>
               </div>
-
-              {/* Action Button */}
-              <button
-                onClick={() => handleLaunchDemo(app.id)}
-                className="w-full text-center py-2.5 rounded-xl font-bold text-xs transition-all cursor-pointer"
-                style={{
-                  background: 'var(--color-elevated)',
-                  border: '1px solid var(--color-border-strong)',
-                  color: 'var(--color-text-primary)',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-                }}
-                onMouseEnter={e => {
-                  e.target.style.background = app.color
-                  e.target.style.color = '#000'
-                  e.target.style.borderColor = app.color
-                  e.target.style.boxShadow = `0 0 16px ${app.glow}`
-                }}
-                onMouseLeave={e => {
-                  e.target.style.background = 'var(--color-elevated)'
-                  e.target.style.color = 'var(--color-text-primary)'
-                  e.target.style.borderColor = 'var(--color-border-strong)'
-                  e.target.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)'
-                }}
-              >
-                Launch Demo →
-              </button>
-            </motion.div>
-          ))}
+            </div>
+            <button
+              onClick={() => {
+                loginAsbanker()
+                selectApplication('PRZ-2024-001')
+                navigate('/banker/dashboard')
+              }}
+              className="w-full text-center py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer"
+              style={{
+                background: 'linear-gradient(135deg, #6366f1, #a855f7)',
+                border: 'none',
+                color: '#fff',
+                boxShadow: '0 4px 16px rgba(99,102,241,0.35)',
+              }}
+            >
+              Enter Banker Dashboard →
+            </button>
+          </motion.div>
+          {/* MSME Dashboard Option */}
+          <motion.div
+            whileHover={{ y: -6, transition: { duration: 0.2 } }}
+            style={{
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-border-default)',
+              borderRadius: 24,
+              padding: '32px',
+              textAlign: 'left',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              position: 'relative',
+              overflow: 'hidden',
+              boxShadow: 'var(--shadow-card)',
+              transition: 'border-color 0.3s ease',
+            }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = '#06b6d4'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--color-border-default)'}
+          >
+            {/* Ambient Corner Glow */}
+            <div style={{
+              position: 'absolute', top: -50, right: -50, width: 160, height: 160,
+              background: 'radial-gradient(circle, rgba(6,182,212,0.22), transparent 70%)',
+              borderRadius: '50%', pointerEvents: 'none'
+            }}/>
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <span style={{
+                  fontSize: '11px', fontWeight: 800, padding: '4px 12px',
+                  borderRadius: 9999, background: 'rgba(6,182,212,0.15)',
+                  color: '#06b6d4', border: '1px solid rgba(6,182,212,0.3)',
+                  textTransform: 'uppercase', letterSpacing: '0.06em'
+                }}>
+                  🏭 For Business Owners & Borrowers
+                </span>
+                <span style={{ fontSize: '24px' }}>📈</span>
+              </div>
+              <h3 style={{ fontSize: 22, fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: 6 }}>
+                Enter MSME Dashboard
+              </h3>
+              <div style={{ fontSize: 13, color: '#06b6d4', fontWeight: 600, marginBottom: 16 }}>
+                Self-Service Loan & Growth Portal
+              </div>
+              <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: 24 }}>
+                Experience the transparent borrower journey. Check real-time application health, simulate supplementary document uploads to unlock higher funding ceilings, and read AI underwriting narratives.
+              </p>
+              {/* Feature Checklist */}
+              <div className="flex flex-col gap-2.5 mb-8" style={{ borderTop: '1px solid var(--color-border-subtle)', paddingTop: 18 }}>
+                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                  <span style={{ color: '#06b6d4' }}>✓</span> Real-Time Loan Eligibility & Status Tracking
+                </div>
+                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                  <span style={{ color: '#06b6d4' }}>✓</span> Interactive Evidence Completion Checklist
+                </div>
+                <div className="flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                  <span style={{ color: '#06b6d4' }}>✓</span> Transparent AI Score Explainer & Insights
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                selectApplication('PRZ-2024-001')
+                navigate('/msme/dashboard')
+              }}
+              className="w-full text-center py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer"
+              style={{
+                background: 'linear-gradient(135deg, #06b6d4, #10b981)',
+                border: 'none',
+                color: '#fff',
+                boxShadow: '0 4px 16px rgba(6,182,212,0.35)',
+              }}
+            >
+              Enter MSME Dashboard →
+            </button>
+          </motion.div>
         </motion.div>
       </motion.div>
-
       {/* Footer Info */}
       <footer className="flex items-center justify-between px-10 mt-6 relative z-10" style={{ borderTop: '1px solid var(--color-border-subtle)', paddingTop: 16 }}>
-        <span style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>© 2024 Prism AI · Built for IDBI Innovate Hackathon</span>
+        <span style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>© {new Date().getFullYear()} Prism AI · Built for IDBI Innovate Hackathon</span>
         <span style={{ fontSize: '10px', color: 'var(--color-text-muted)' }}>Architecture: Deterministic engine + LLM Explanation narrator</span>
       </footer>
     </div>
