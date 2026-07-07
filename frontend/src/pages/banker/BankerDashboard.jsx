@@ -137,7 +137,7 @@ export default function BankerDashboard() {
               Credit Pipeline
             </h1>
             <p style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>
-              Wednesday, 15 January 2024 · IDBI Bank, Mumbai Branch
+              {new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} · IDBI Bank, Mumbai Branch
             </p>
           </div>
           <motion.button
