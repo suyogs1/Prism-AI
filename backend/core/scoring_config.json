@@ -1,0 +1,27 @@
+{
+  "weights": {
+    "cash_flow_weight": 0.35,
+    "growth_weight": 0.20,
+    "trust_weight": 0.25,
+    "risk_weight": 0.20
+  },
+  "thresholds": {
+    "approval_threshold": 75,
+    "review_threshold": 50,
+    "evidence_threshold": 70
+  },
+  "confidence_points": {
+    "bank_statement": 40,
+    "gst_returns": 25,
+    "epfo_summary": 15,
+    "upi_history": 10,
+    "relationship_history": 10
+  },
+  "loan_sizing": {
+    "max_monthly_revenue_multiplier": 3.0,
+    "max_debt_to_income_ratio": 0.40,
+    "risk_multiplier_high": 0.50,
+    "risk_multiplier_medium": 0.80,
+    "risk_multiplier_low": 1.00
+  }
+}
